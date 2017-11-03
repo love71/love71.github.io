@@ -4,6 +4,43 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/10/30/%E8%B5%B0%E8%BF%87%E7%9A%84%E9%A3%8E%E6%99%AF%E7%9C%8B%E8%BF%87%E7%9A%84%E4%BA%BA/</loc>
+    <lastmod>2017-11-03T12:52:12.642Z</lastmod>
+    <data>
+        <display>
+        <title>走过的风景，看过的人</title>
+        <pubTime>2017-10-30T15:59:17.497Z</pubTime>
+        
+        <tag>随笔</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/11/03/Windows%E4%B8%8B%E9%93%BE%E6%8E%A5Ubuntu%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/</loc>
+    <lastmod>2017-11-03T12:52:04.240Z</lastmod>
+    <data>
+        <display>
+        <title>Windows建立与Ubuntu16.04远程桌面链接</title>
+        <pubTime>2017-11-03T09:32:24.040Z</pubTime>
+        
+        <tag>Linux</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务器" url="http://yoursite.com/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/10/25/love/</loc>
     <lastmod>2017-11-03T09:51:41.140Z</lastmod>
     <data>
@@ -17,26 +54,6 @@
            
              
               <breadCrumb title="生活" url="http://yoursite.com/categories/%E7%94%9F%E6%B4%BB/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/11/03/Windows%E4%B8%8B%E9%93%BE%E6%8E%A5Ubuntu%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/</loc>
-    <lastmod>2017-11-03T09:36:12.135Z</lastmod>
-    <data>
-        <display>
-        <title>Windows建立与Ubuntu16.04远程桌面链接</title>
-        <pubTime>2017-11-03T09:32:24.040Z</pubTime>
-        
-        <tag>Linux</tag>
-         
-         
-           
-             
-              <breadCrumb title="服务器" url="http://yoursite.com/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
           
         </display>
     </data>
@@ -66,21 +83,4 @@
     
     
     
-    
-  <url>
-    <loc>http://yoursite.com/2017/10/30/%E8%B5%B0%E8%BF%87%E7%9A%84%E9%A3%8E%E6%99%AF%E7%9C%8B%E8%BF%87%E7%9A%84%E4%BA%BA/</loc>
-    <lastmod>2017-10-30T16:22:24.334Z</lastmod>
-    <data>
-        <display>
-        <title>走过的风景，看过的人</title>
-        <pubTime>2017-10-30T15:59:17.497Z</pubTime>
-        
-        <tag>随笔</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
 </urlset>
