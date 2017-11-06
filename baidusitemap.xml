@@ -4,8 +4,28 @@
 
     
   <url>
+    <loc>http://yoursite.com/2017/11/01/linux%E6%90%AD%E5%BB%BA%E5%A4%96%E7%BD%91%E7%9A%84msf%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2017-11-06T07:34:40.573Z</lastmod>
+    <data>
+        <display>
+        <title>Linux下搭建外网Msf</title>
+        <pubTime>2017-11-01T09:42:00.232Z</pubTime>
+        
+        <tag>Msf</tag>
+         
+         
+           
+             
+              <breadCrumb title="服务器" url="http://yoursite.com/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://yoursite.com/2017/11/06/Msf%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%EF%BC%88%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0%EF%BC%89/</loc>
-    <lastmod>2017-11-05T17:08:23.216Z</lastmod>
+    <lastmod>2017-11-06T07:34:30.603Z</lastmod>
     <data>
         <display>
         <title>Msf的一些常用操作(入坑笔记)</title>
@@ -134,26 +154,6 @@
            
              
               <breadCrumb title="生活" url="http://yoursite.com/categories/%E7%94%9F%E6%B4%BB/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://yoursite.com/2017/11/01/linux%E6%90%AD%E5%BB%BA%E5%A4%96%E7%BD%91%E7%9A%84msf%E7%AC%94%E8%AE%B0/</loc>
-    <lastmod>2017-11-01T10:42:10.377Z</lastmod>
-    <data>
-        <display>
-        <title>Linux下搭建外网Msf</title>
-        <pubTime>2017-11-01T09:42:00.232Z</pubTime>
-        
-        <tag>Msf</tag>
-         
-         
-           
-             
-              <breadCrumb title="服务器" url="http://yoursite.com/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
           
         </display>
     </data>

@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2017/11/01/linux%E6%90%AD%E5%BB%BA%E5%A4%96%E7%BD%91%E7%9A%84msf%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2017-11-06T07:34:40.573Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/11/06/Msf%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%EF%BC%88%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0%EF%BC%89/</loc>
     
-    <lastmod>2017-11-05T17:08:23.216Z</lastmod>
+    <lastmod>2017-11-06T07:34:30.603Z</lastmod>
     
   </url>
   
@@ -47,13 +54,6 @@
     <loc>http://yoursite.com/2017/10/25/love/</loc>
     
     <lastmod>2017-11-03T09:51:41.140Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/11/01/linux%E6%90%AD%E5%BB%BA%E5%A4%96%E7%BD%91%E7%9A%84msf%E7%AC%94%E8%AE%B0/</loc>
-    
-    <lastmod>2017-11-01T10:42:10.377Z</lastmod>
     
   </url>
   
