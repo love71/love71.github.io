@@ -1823,7 +1823,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #097fd1;
+  background: #ba5edd;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2990,4 +2990,10 @@ pre .javascript .function {
   .post-body {
     text-align: justify;
   }
+}
+* {
+  cursor: url("http://cur.cursors-4u.net/cursors/cur-2/cur116.cur"), auto !important;
+}
+:active {
+  cursor: url("http://cur.cursors-4u.net/cursors/cur-2/cur117.cur"), auto !important;
 }
