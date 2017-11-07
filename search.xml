@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[绕过百度云加速注入(Mssql+Aspx)]]></title>
+    <url>%2F2017%2F11%2F07%2F%E7%BB%95%E8%BF%87%E7%99%BE%E5%BA%A6%E4%BA%91%E5%8A%A0%E9%80%9F%E6%B3%A8%E5%85%A5(Mssql%2BAspx)%2F</url>
+    <content type="text"><![CDATA[LoL-Solo-yasuo赢了遗忘大佬然后分享下前几天大佬给我的注入的Bypass。 单引号报错，然后一番fuzz发现是字符型的mssql数据库支持报错。然后发现有百度云加速的拦截。 然后一番测试后发现如下payload：这里的关键在于and-1这个地方，不仅百度云加速不能正确识别，安全狗也不能，这个的移植性不错，可以记录下。 继续测发现出数据库被拦截了 这里先得明确他拦截的地方，才能对症下药，不用说是拦截了db_name()这种高危组合，这很正常，正如seslect from这个组合被拦截一样，一般的waf会对一些高危组合拦截，所以找办法解决这个问题就好。注意：得把db_name()放到等号前面，放在等号后面还是会被拦截，虽然本屌还是有绝招绕过，但是这本屌得私藏了。 当我爆库的时候又跳出来了一个熟悉的东西但是老铁，我发现你简直就是来送的啊！直接一个!=解决。好吧！这里我承认有点乱了，但是我相信明眼人一眼就看穿了道理。 最后终于注射进去了 再次回顾一下该文章的写作原因：与遗忘大佬打赌，solo压缩，6级之前杀他，不杀算我输，但是一开局大佬就没离开过防御塔250码，也就是压缩一个q的距离还短一点，终于就这样等到了5级半多，我知道再死4个兵我就6级了，然后攒了一个风，一个eq闪击飞大佬，A+e+引燃一套上去，大佬闪现进塔，我跟闪现，一顿qaa+q+a送大佬回家，就这样在6级之前杀死了敌方压缩，杀死大佬后我也成功到达了6级。 无敌是多么寂寞 文章谢绝转载，因为这只是我学习的记录和与朋友分享的小技巧。]]></content>
+      <categories>
+        <category>注入</category>
+      </categories>
+      <tags>
+        <tag>百度云加速</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[绕过WTS-WAF注入与上传]]></title>
     <url>%2F2017%2F11%2F07%2F%E7%BB%95%E8%BF%87WTS-WAF%E6%B3%A8%E5%85%A5%E4%B8%8E%E4%B8%8A%E4%BC%A0%2F</url>
     <content type="text"><![CDATA[注入Bypass这个办法很好用也很有探索的价值，所以这里讲解这个办法： 条件：满足post传值。 我实战中的环境是：php+apache+mysql 这里科普一个很简单的小白文就是hpp：当同时接收到几个值的时候，apache是以最后一个值为参数传递。x.php?id=1&amp;id=2&amp;id=3 ==&gt; x.php?id=3 假如原来我们发现的带wts的注入url是：www.xx.com/abc.php?id=1这里的id是以$id=$_REQUEST[‘id’]的传值方式（就是要支持post） payload:www.xx.com/abc.phppostdata: id=一&amp;id=1 union select username,password from admin那个id=一是汉字一，后面无视注入即可。 上传Bypass 这个是网上有的，但是现在还可以使用payload： filename=”123.ph[这里回车]p” 这个是我自己在实战中发现的，目前未公开，与D盾原来的绕过上传一样的姿势。想知道的朋友可以去详情了解下这个边界是干啥用的。其实就是机器识别你这个上传文件的一些地方标识。 文章中的所有内容都是我在多次实战中得到的结果，不是靶机也不是理论，没有具体截图，信则有，不信则无。 文章谢绝转载，因为这只是我学习的记录和与朋友分享的小技巧。]]></content>
