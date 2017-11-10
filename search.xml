@@ -47,7 +47,7 @@
   <entry>
     <title><![CDATA[administrator提升system权限小技巧]]></title>
     <url>%2F2017%2F11%2F05%2Fadministrator%E6%8F%90%E5%8D%87system%E6%9D%83%E9%99%90%E5%B0%8F%E6%8A%80%E5%B7%A7%2F</url>
-    <content type="text"><![CDATA[正文当administrator权限进入服务器后，不利用exp的情况下提升到system权限。 windows2003通过shift后门弹出来的cmd是system权限。 windows2008依次执行下面两条命令： sc Create SuperCMD binPath= “cmd /K start” type= own type= interact sc start SuperCMD 当执行完第二条后会出现如图情况：进入后弹出来的cmd就是system权限了。]]></content>
+    <content type="text"><![CDATA[正文当administrator权限进入服务器后，不利用exp的情况下提升到system权限。 windows2003通过shift后门弹出来的cmd是system权限。 windows2008依次执行下面两条命令： sc Create SuperCMD binPath= “cmd /K start” type= own type= interact// 注意，”cmd /K start”，这是英文引号，不是中文，好像文章中他会自动变成中文引号，大家手动改下。 sc start SuperCMD当执行完第二条后会出现如图情况：进入后弹出来的cmd就是system权限了。]]></content>
       <categories>
         <category>服务器</category>
       </categories>
